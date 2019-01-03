@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Handlers\ImageUploadHandler;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 
@@ -68,7 +69,14 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         //
-        $this->authorize('update',$user);
+
+        try{
+            $this->authorize('update',$user);
+        }catch (AuthorizationException $e){
+            $result = "无权限访问";
+            return view('common.warn',compact('result'));
+        }
+
         return view('users.edit', compact('user'));
     }
 
