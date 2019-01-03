@@ -9,6 +9,12 @@ use App\Http\Requests\UserRequest;
 
 class UsersController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth',['expect'=>['show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -62,7 +68,7 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         //
-
+        $this->authorize('update',$user);
         return view('users.edit', compact('user'));
     }
 
@@ -75,6 +81,8 @@ class UsersController extends Controller
      */
     public function update(UserRequest  $request, User $user,ImageUploadHandler $uploader)
     {
+
+        $this->authorize('update',$user);
         //获取上传的头像
         $data = $request->all();
 
